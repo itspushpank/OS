@@ -1,0 +1,81 @@
+Priority CPU Scheduling Algorithm Explanation
+=============================================
+
+Overview
+--------
+This program implements Priority Scheduling (Non-Preemptive) where each process has a priority value. 
+Lower priority number = higher priority. The scheduler selects the process with the highest priority 
+(lowest number) among those that have arrived.
+
+Data Structure
+--------------
+struct Process {
+    int pid;        // Process ID (1, 2, 3...)
+    int at;         // Arrival Time
+    int bt;         // Burst Time (original)
+    int priority;   // Priority value (lower = higher priority)
+    int ct;         // Completion Time
+    int tat;        // Turnaround Time = CT - AT
+    int wt;         // Waiting Time = TAT - BT
+    int rt;         // Response Time (first time CPU allocated)
+    int completed;  // Flag: 1 if finished, 0 otherwise
+};
+
+Key Functions
+-------------
+
+1. sortByArrival(struct Process p[], int n)
+   - Sorts processes by arrival time using bubble sort
+   - Ensures processes are in order of arrival before scheduling
+
+2. priorityScheduling(struct Process p[], int n)
+   - Main scheduling loop runs until all processes complete
+   - At each time unit, scans all processes to find:
+     * Process that has arrived (at <= currentTime)
+     * Not yet completed
+     * Has minimum priority value
+   - Tie-breaker: earlier arrival time wins
+   - If no process available, increments currentTime (idle CPU)
+   - Tracks response time on first CPU allocation
+   - Decrements burst time each time unit
+   - When burst reaches 0: calculates CT, TAT, WT, marks completed
+
+3. printResults(struct Process p[], int n)
+   - Displays formatted table with all metrics
+   - Calculates and prints average waiting time and turnaround time
+
+Algorithm Logic
+---------------
+Time Complexity: O(n²) due to nested loops in scheduling
+Space Complexity: O(n) for process array
+
+Scheduling Steps:
+1. Initialize currentTime = 0, completed = 0
+2. While completed < n:
+   a. Find available process with highest priority (lowest number)
+   b. If none found: currentTime++ (CPU idle)
+   c. Else: execute process for 1 time unit
+      - If first execution: record response time
+      - Decrement remaining burst time
+      - Increment currentTime
+      - If burst == 0: calculate final metrics, mark completed
+3. Print results
+
+Formulas Used
+-------------
+Turnaround Time (TAT) = Completion Time - Arrival Time
+Waiting Time (WT) = Turnaround Time - Burst Time
+Response Time = First CPU Allocation Time - Arrival Time
+
+Sample Execution
+----------------
+Input:
+3 processes
+P1: AT=0, BT=5, Priority=2
+P2: AT=1, BT=3, Priority=1  (highest priority)
+P3: AT=2, BT=8, Priority=3
+
+Execution Order: P1(0-1) -> P2(1-4) -> P1(4-8) -> P3(8-16)
+Note: P2 preempts P1 at t=1 due to higher priority
+
+Output shows CT, TAT, WT for each process with averages.
