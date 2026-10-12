@@ -2,7 +2,7 @@
 
 int at[5], bt[5], pt[5];
 
-int ct[5], tat[5], rt[5], cat = 0, arival = 0, p = 0, complete = 0;
+int ct[5], tat[5], rt[5], cat = 0, arival = 0, idx, f, complete = 0;
 
 float sum_tat, sum_wt;
 
@@ -19,16 +19,32 @@ int main()
         scanf("%d", &pt[i]);
     }
 
-    int i = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        rt[i] = bt[i];
+    }
+
     while (complete < 5)
     {
+        idx = -1;
+        f = 0;
         for (int i = 0; i < 5; i++)
         {
-            if (at[i] <= arival && pt[i] < p )
+            if (at[i] <= arival && rt[i] > 0)
             {
-                ct[i]= bt[i] 
+                if (!f || pt[i] < pt[idx])
+                {
+                    idx = i;
+                    f = 1;
+                }
             }
+
+            if(!f){
+                cat++;
+                continue;
+            }
+
+            
         }
-        i++;
     }
 }
