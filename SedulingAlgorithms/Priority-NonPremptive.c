@@ -38,7 +38,7 @@ int main() {
         for (i = 0; i < n; i++) {
             if (p[i].at <= currentTime && !p[i].done) {
                 if (p[i].priority < minPriority) {
-                    minPriority = p[i].bt;
+                    minPriority = p[i].priority;
                     idx = i;
                 }
 
